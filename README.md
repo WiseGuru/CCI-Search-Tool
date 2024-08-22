@@ -1,6 +1,8 @@
 # CCI Search Tool
 This is a Python script to search and return CCIs from a local XML file.
 
+> Big disclaimer: ChatGPT wrote the script, I just debugged and finished it.
+
 You can download the full list of CCI's from the [DoD Cyber Exchange](https://public.cyber.mil/stigs/cci/)
 
 If you want to get started as soon as possible, just download the zip from the exchange above, extract it, and save the `cci_search.py` into the extracted folder.
