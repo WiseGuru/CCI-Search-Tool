@@ -54,12 +54,27 @@ def output_results(criteria, results):
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
+    # Sort function: Place "NIST SP 800-53 Revision 5" on top, otherwise sort by version in descending order
+    def sort_references(references):
+        # Prioritize NIST SP 800-53 Revision 5, otherwise sort by title and version
+        references.sort(key=lambda ref: (
+            0 if ref['title'] == 'NIST SP 800-53 Revision 5' else 1,  # NIST SP 800-53 Revision 5 first
+            ref['title'],  # Group by title (e.g., NIST SP 800-53, NIST SP 800-53A)
+            -int(ref['version'])  # Sort by version in descending order
+        ))
+
     # Output to a file
     output_file = os.path.join(output_folder, f'{criteria}_search_results.txt')
     with open(output_file, 'w') as f:
         for result in results:
             output_text = f"  CCI ID:\n{result['id']}\n  Definition:\n{result['definition']}\n  References:\n"
-            for reference in result['references']:
+            references = result['references']
+            
+            # Sort references using the custom sort function
+            sort_references(references)
+            
+            # Output sorted references
+            for reference in references:
                 output_text += (
                     f"  - Title: {reference['title']}, Version: {reference['version']}, "
                     f"Index: {reference['index']}\n"
@@ -71,6 +86,7 @@ def output_results(criteria, results):
 
     # Open the file with the default text editor
     open_file(output_file)
+
 
 def open_file(filepath):
     if platform.system() == "Windows":
