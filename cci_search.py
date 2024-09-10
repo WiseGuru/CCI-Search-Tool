@@ -54,12 +54,20 @@ def output_results(criteria, results):
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
-    # Sort function: Place "NIST SP 800-53 Revision 5" on top, otherwise sort by version in descending order
+    # Hardcoded title order
+    # These titles were the only unique titles extracted from the CCI XML
+    title_order = [
+        "NIST SP 800-53 Revision 5",
+        "NIST SP 800-53 Revision 4",
+        "NIST SP 800-53",
+        "NIST SP 800-53A",
+    ]
+
+    # Sort function: prioritize title order and version
     def sort_references(references):
-        # Prioritize NIST SP 800-53 Revision 5, otherwise sort by title and version
+        # Sort by hardcoded title order and then by version descending
         references.sort(key=lambda ref: (
-            0 if ref['title'] == 'NIST SP 800-53 Revision 5' else 1,  # NIST SP 800-53 Revision 5 first
-            ref['title'],  # Group by title (e.g., NIST SP 800-53, NIST SP 800-53A)
+            title_order.index(ref['title']) if ref['title'] in title_order else len(title_order),  # Use title_order or move to the bottom
             -int(ref['version'])  # Sort by version in descending order
         ))
 
@@ -86,6 +94,7 @@ def output_results(criteria, results):
 
     # Open the file with the default text editor
     open_file(output_file)
+
 
 
 def open_file(filepath):
