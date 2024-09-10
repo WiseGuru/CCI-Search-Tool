@@ -82,7 +82,7 @@ def open_file(filepath):
 
 if __name__ == "__main__":
     # Ask for the search criteria
-    search_criteria = input("Enter the reference index to search for (e.g., 'AC-1' or 'AC-1 (2)'): ").strip()
+    search_criteria = input("Enter the reference index to search for (e.g., 'AC-1' or 'AC-1 (2)'): ").strip().upper()
 
     # Search for the CCI items
     matching_cci_items = search_cci(search_criteria)
