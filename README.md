@@ -13,6 +13,8 @@ The search results will get saved as a file in the subfolder "txt_output" and op
 
 # Obsidian Modification
 
+> BIGGER DISCLAIMER: This script is pretty buggy for me, I would just use the main one, but here for posterity.
+
 This is a version that's designed to be run from within Obsidian using the twibiral's [Execute Code plugin for Obsidian](https://github.com/twibiral/obsidian-execute-code). It outputs files in MarkDown and saves them to a folder in Obsidian, making it easy to reference and search.
 
 Before you can use it, you'll need to  do a few things.
