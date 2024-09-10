@@ -26,22 +26,25 @@ def search_cci(criteria):
         references = cci_item.find('ns:references', ns)
         if references is not None:
             for reference in references.findall('ns:reference', ns):
+                # Check if the reference index matches the search criteria
                 if criteria_pattern.search(reference.get('index', '')):
-                    matches.append({
-                        'id': cci_item.get('id'),
-                        'definition': cci_item.find('ns:definition', ns).text,
-                        'references': [
-                            {
-                                'creator': ref.get('creator'),
-                                'title': ref.get('title'),
-                                'version': ref.get('version'),
-                                'location': ref.get('location'),
-                                'index': ref.get('index')
-                            }
-                            for ref in references.findall('ns:reference', ns)
-                        ]
-                    })
-                    break
+                    # Further filter to include only references that mention NIST SP 800-53 Revision 5
+                    if "NIST SP 800-53 Revision 5" in reference.get('title', ''):
+                        matches.append({
+                            'id': cci_item.get('id'),
+                            'definition': cci_item.find('ns:definition', ns).text,
+                            'references': [
+                                {
+                                    'creator': ref.get('creator'),
+                                    'title': ref.get('title'),
+                                    'version': ref.get('version'),
+                                    'location': ref.get('location'),
+                                    'index': ref.get('index')
+                                }
+                                for ref in references.findall('ns:reference', ns)
+                            ]
+                        })
+                        break
 
     return matches
 
@@ -77,15 +80,23 @@ def open_file(filepath):
     else:  # Linux and other Unix-like systems
         subprocess.call(("xdg-open", filepath))
 
+def main():
+    while True:
+        # Ask for the search criteria
+        search_criteria = input("Enter the reference index to search for (e.g., 'AC-1' or 'AC-1 (2)'): ").strip()
+
+        # Search for the CCI items
+        matching_cci_items = search_cci(search_criteria)
+
+        # Output the results and open the file
+        if matching_cci_items:
+            output_results(search_criteria, matching_cci_items)
+            break  # Exit loop if we find results
+        else:
+            print(f"No CCI items found for the reference index '{search_criteria}' or with 'NIST SP 800-53 Revision 5'.")
+            retry = input("Would you like to try another search? (y/n): ").strip().lower()
+            if retry != 'y':
+                break  # Exit loop if the user doesn't want to search again
+
 if __name__ == "__main__":
-    # Ask for the search criteria
-    search_criteria = input("Enter the reference index to search for (e.g., 'AC-1' or 'AC-1 (2)'): ").strip()
-
-    # Search for the CCI items
-    matching_cci_items = search_cci(search_criteria)
-
-    # Output the results and open the file
-    if matching_cci_items:
-        output_results(search_criteria, matching_cci_items)
-    else:
-        print(f"No CCI items found for the reference index '{search_criteria}'.")
+    main()
