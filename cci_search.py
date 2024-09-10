@@ -82,8 +82,8 @@ def open_file(filepath):
 
 def main():
     while True:
-        # Ask for the search criteria
-        search_criteria = input("Enter the reference index to search for (e.g., 'AC-1' or 'AC-1 (2)'): ").strip()
+        # Ask for the search criteria and normalize it to uppercase
+        search_criteria = input("Enter the reference index to search for (e.g., 'AC-1' or 'AC-1 (2)'): ").strip().upper()
 
         # Search for the CCI items
         matching_cci_items = search_cci(search_criteria)
@@ -91,11 +91,14 @@ def main():
         # Output the results and open the file
         if matching_cci_items:
             output_results(search_criteria, matching_cci_items)
-            break  # Exit loop if we find results
+            print(f"SUCCESS: CCI items found for the reference index '{search_criteria}' with 'NIST SP 800-53 Revision 5' and exported to file.")
+            retry = input("Would you like to conduct another search? (y/N): ").strip().lower()
+            if retry.lower() != 'y':
+                break  # Exit loop if the user doesn't want to search again
         else:
-            print(f"No CCI items found for the reference index '{search_criteria}' or with 'NIST SP 800-53 Revision 5'.")
-            retry = input("Would you like to try another search? (y/n): ").strip().lower()
-            if retry != 'y':
+            print(f"NO RESULTS: No CCI items found for the reference index '{search_criteria}' with 'NIST SP 800-53 Revision 5'.")
+            retry = input("Would you like to try another search? (y/N): ").strip().lower()
+            if retry.lower() != 'y':
                 break  # Exit loop if the user doesn't want to search again
 
 if __name__ == "__main__":
