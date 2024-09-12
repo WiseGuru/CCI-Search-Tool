@@ -75,7 +75,7 @@ def output_results(criteria, results):
     output_file = os.path.join(output_folder, f'{criteria}_search_results.txt')
     with open(output_file, 'w') as f:
         for result in results:
-            output_text = f"  CCI ID:\n{result['id']}\n  Definition:\n{result['definition']}\n  References:\n"
+            output_text = f"{result['id']}\n{result['definition']}\n  References:\n"
             references = result['references']
             
             # Sort references using the custom sort function
