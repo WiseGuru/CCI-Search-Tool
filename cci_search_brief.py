@@ -101,7 +101,7 @@ def output_results(criteria, results):
         for result in sorted_results:
             # Prepare the output line with CCI ID, Compliant/Non-Compliant, Index, and Definition
             cci_output = f"- {result['id']}: Compliant/Non-Compliant\n"
-            cci_output += f"{result['index']}: {result['definition']}\n\n"
+            cci_output += f"	- {result['index']}: {result['definition']}\n\n"
             f.write(cci_output)
 
     # Open the file with the default text editor
